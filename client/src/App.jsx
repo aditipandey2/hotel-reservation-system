@@ -18,96 +18,88 @@ function App() {
   }, []);
 
   const fetchHotelData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost:5000/api/rooms');
-      if (!response.ok) {
-        throw new Error('Failed to fetch hotel data');
-      }
-      const data = await response.json();
-      setHotelData(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const response = await fetch('https://hotel-reservation-api-2oo0.onrender.com/api/rooms');
+    if (!response.ok) {
+      throw new Error('Failed to fetch hotel data');
     }
-  };
+    const data = await response.json();
+    setHotelData(data);
+    setError(null);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleBookRooms = async (numberOfRooms) => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost:5000/api/rooms/book', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ numberOfRooms }),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to book rooms');
-      }
-      
-      const result = await response.json();
-      setBookingResult(result);
-      fetchHotelData(); // Refresh hotel data after booking
-    } catch (err) {
-      setError(err.message);
-      setBookingResult(null);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const response = await fetch('https://hotel-reservation-api-2oo0.onrender.com/api/rooms/book', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numberOfRooms }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to book rooms');
     }
-  };
+
+    const result = await response.json();
+    setBookingResult(result);
+    fetchHotelData(); // Refresh hotel data after booking
+  } catch (err) {
+    setError(err.message);
+    setBookingResult(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleRandomizeOccupancy = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost:5000/api/rooms/randomize', {
-        method: 'POST',
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to randomize room occupancy');
-      }
-      
-      fetchHotelData(); // Refresh hotel data after randomizing
-      setBookingResult(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const response = await fetch('https://hotel-reservation-api-2oo0.onrender.com/api/rooms/randomize', {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to randomize room occupancy');
     }
-  };
+
+    fetchHotelData(); // Refresh hotel data after randomizing
+    setBookingResult(null);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleResetBookings = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost:5000/api/rooms/reset', {
-        method: 'POST',
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to reset bookings');
-      }
-      
-      fetchHotelData(); // Refresh hotel data after reset
-      setBookingResult(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const response = await fetch('https://hotel-reservation-api-2oo0.onrender.com/api/rooms/reset', {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to reset bookings');
     }
-  };
 
-  if (loading && !hotelData.floors.length) {
-    return <div className="loading">Loading hotel data...</div>;
+    fetchHotelData(); // Refresh hotel data after reset
+    setBookingResult(null);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
   }
-
-  if (error) {
-    return <div className="error">Error: {error}</div>;
-  }
+};
 
   return (
     <div className="app">
